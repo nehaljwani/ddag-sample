@@ -7,14 +7,14 @@ use lib qw(lib);
 use List::Util qw(reduce);
 use Mojolicious::Lite;
 use Mojo::Redis2;
-use ddag_sample::abc;
+use ddag_sample::cde;
 use Mojo::Pg;
 
 app->config(hypnotoad => {listen => ['http://*:80']});
 
-my $pg = Mojo::Pg->new('postgresql://postgres:nlprocks@localhost/test');
+my $pg = Mojo::Pg->new('postgresql://ddag:nlprocks@localhost/pipelines');
 
-my $modulename = "abc";
+my $modulename = "cde";
 helper redis => sub {
     state $r = Mojo::Redis2->new(url => "redis://redis:6379");
 };
@@ -39,7 +39,7 @@ sub process {
     } else {
         @newhash{ map { s/_[^_]*$//r } keys %{$hash} } = values %{$hash};
     }
-    return ddag_sample::abc::process(%newhash);
+    return ddag_sample::cde::process(%newhash);
 }
 
 sub genError {

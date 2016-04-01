@@ -12,7 +12,7 @@ use Mojo::Pg;
 
 app->config(hypnotoad => {listen => ['http://*:80']});
 
-my $pg = Mojo::Pg->new('postgresql://postgres:nlprocks@localhost/test');
+my $pg = Mojo::Pg->new('postgresql://ddag:nlprocks@localhost/pipelines');
 
 my $modulename = "abc";
 helper redis => sub {
