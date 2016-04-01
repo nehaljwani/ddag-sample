@@ -21,7 +21,7 @@ helper redis => sub {
 
 $pg->migrations->name('nlp')->from_string(<<EOF)->migrate;
 -- 1 up
-create unlogged table jobs (jobid text, module text, data text);
+create unlogged table jobs (jobid text, modid text, module text, data text);
 -- 1 down
 drop table jobs;
 EOF
@@ -71,10 +71,10 @@ post '/pipeline' => sub {
     my @ilmt_inputs = map {@$_[0]} $ilmt_dag->edges_to($ilmt_module);
     my $db = $pg->db;
     foreach (@ilmt_inputs) {
-	$db->query('insert into jobs (jobid, module, data) values (?, ?, ?)', $ilmt_jobid, $_, $ilmt_data->{$_}) if $ilmt_data->{$_};
+	$db->query('insert into jobs (jobid, modid, module, data) values (?, ?, ?, ?)', $ilmt_jobid,$ilmt_modid, $_, $ilmt_data->{$_}) if $ilmt_data->{$_};
     }
     my %content;
-    my $results = $db->query('select * from jobs where jobid = (?)', $ilmt_jobid);
+    my $results = $db->query('select * from jobs where jobid = (?) and modid = (?)', $ilmt_jobid, $ilmt_modid);
     while (my $next = $results->hash) {
         $content{$next->{module}} = $next->{data};
     }
