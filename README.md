@@ -87,6 +87,9 @@ $ cat /tmp/input.txt
     ],
     "cde_1": [
       "def_1"
+    ],
+    "def_1": [
+      "bcd_2"
     ]
   },
   "data": {
@@ -104,14 +107,15 @@ and finally, query it (replace 172.18.0.2 with the IP of the 'public' container)
 ```bash
 $ curl -s -H Expect: 172.18.0.2 --data "@/tmp/input.txt" | jq .
 {
-  "efg_1": "Hola! This Is Wani ",
-  "input2": "Hi! This is J ",
   "bcd_1": "hi! this is j hello! this is nehal ",
-  "abc_1": "Hi! This is J Hello! This is Nehal ",
+  "input2": "Hi! This is J ",
+  "efg_1": "Hola! This Is Wani ",
   "cde_1": "HI! THIS IS J HELLO! THIS IS NEHAL ",
-  "def_1": " LAHEN SI SIHT !OLLEH J SI SIHT !IH: lahen si siht !olleh j si siht !ih",
+  "abc_1": "Hi! This is J Hello! This is Nehal ",
+  "bcd_2": " lahen si siht !olleh j si siht !ih: lahen si siht !olleh j si siht !ih",
+  "input1": "Hello! This is Nehal ",
   "input3": "Hola! This is Wani ",
-  "input1": "Hello! This is Nehal "
+  "def_1": " lahen si siht !olleh j si siht !ih: LAHEN SI SIHT !OLLEH J SI SIHT !IH"
 }
 ```
 
