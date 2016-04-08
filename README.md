@@ -48,4 +48,11 @@ Or for a quick setup, do the following:
     ```bash
     $ docker network create -d overlay ddag-net
     ```
-        
+
+### Running modules as docker containers
+For each module, perform the following (replace abc with the name of the module and 10.1.65.241 with IP address of the swarm manager)
+```bash
+echo docker -H 10.1.65.241:4000 run -dit --name abc --hostname abc --net ddag-net nehaljwani/ddag-base:latest /bin/bash
+echo docker -H 10.1.65.241:4000 cp modules/abc abc:/
+echo docker -H 10.1.65.241:4000 exec -d abc bash -c 'cd /abc ; hypnotoad api.pl'
+```
