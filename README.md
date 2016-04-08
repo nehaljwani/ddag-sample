@@ -50,9 +50,69 @@ Or for a quick setup, do the following:
     ```
 
 ### Running modules as docker containers
-For each module, perform the following (replace abc with the name of the module and 10.1.65.241 with IP address of the swarm manager)
+For each module, do the following (replace abc with the name of the module and 10.1.65.241 with IP address of the swarm manager)
 ```bash
 echo docker -H 10.1.65.241:4000 run -dit --name abc --hostname abc --net ddag-net nehaljwani/ddag-base:latest /bin/bash
 echo docker -H 10.1.65.241:4000 cp modules/abc abc:/
 echo docker -H 10.1.65.241:4000 exec -d abc bash -c 'cd /abc ; hypnotoad api.pl'
 ```
+For the public API end point, do: (replace 10.1.65.241 with IP address of the swarm manager)
+```bash
+echo docker -H 10.1.65.241:4000 run -dit --name public --hostname public --net ddag-net nehaljwani/ddag-base:latest /bin/bash
+echo docker -H 10.1.65.241:4000 cp modules/public.pl public:/
+echo docker -H 10.1.65.241:4000 exec -d abc bash -c 'hypnotoad public.pl'
+```
+
+### Querying distributed modules
+To process the disconnected directed acyclic graph as shown in the picture above, create the file: `/tmp/input.txt` with the contents:
+```bash
+$ cat /tmp/input.txt
+{
+  "edges": {
+    "input1": [
+      "abc_1"
+    ],
+    "input2": [
+      "abc_1"
+    ],
+    "input3": [
+      "efg_1"
+    ],
+    "abc_1": [
+      "bcd_1",
+      "cde_1"
+    ],
+    "bcd_1": [
+      "def_1"
+    ],
+    "cde_1": [
+      "def_1"
+    ]
+  },
+  "data": {
+    "input1": "Hello! This is Nehal ",
+    "input2": "Hi! This is J ",
+    "input3": "Hola! This is Wani "
+  }
+}
+```
+and then type the following to find out the IP address of the container by the name 'public':
+```bash
+$ docker network inspect ddag-net
+```
+and finally, query it (replace 172.18.0.2 with the IP of the 'public' container). Sample run:
+```bash
+$ curl -s -H Expect: 172.18.0.2 --data "@/tmp/input.txt" | jq .
+{
+  "efg_1": "Hola! This Is Wani ",
+  "input2": "Hi! This is J ",
+  "bcd_1": "hi! this is j hello! this is nehal ",
+  "abc_1": "Hi! This is J Hello! This is Nehal ",
+  "cde_1": "HI! THIS IS J HELLO! THIS IS NEHAL ",
+  "def_1": " LAHEN SI SIHT !OLLEH J SI SIHT !IH: lahen si siht !olleh j si siht !ih",
+  "input3": "Hola! This is Wani ",
+  "input1": "Hello! This is Nehal "
+}
+```
+
+Happy DDAG-ing! :D
