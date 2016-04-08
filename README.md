@@ -62,6 +62,10 @@ echo docker -H 10.1.65.241:4000 run -dit --name public --hostname public --net d
 echo docker -H 10.1.65.241:4000 cp modules/public.pl public:/
 echo docker -H 10.1.65.241:4000 exec -d abc bash -c 'hypnotoad public.pl'
 ```
+Launch the redis key-value store (replace 10.1.65.241 with IP address of the swarm manager)
+```bash
+docker -H 10.1.65.241:4000 run -dit --name redis --hostname redis --net ddag-net redis
+```
 
 ### Querying distributed modules
 To process the disconnected directed acyclic graph as shown in the picture above, create the file: `/tmp/input.txt` with the contents:
