@@ -3,6 +3,8 @@ A sample setup for processing (non?) linear workflows using docker swarm
 
 ![ddag](https://cloud.githubusercontent.com/assets/1779189/14393336/16462410-fde4-11e5-9cc7-1aa5587d620d.png)
 
+This project serves as a sample for setting up a distributed cluster of nodes which can be part of a (disconnected?) directed acyclic graph. Each node in this graph represents a module which performs some action in the scientific workflow. For example, in the context of NLP, it can be a Morph Analyzer written in C. Each node hosts an internal API (as a wrapper over the program) using the real-time web framework [Mojolicious](https://github.com/kraih/mojo) . This setup helps in processing the components of the given pipeline, which are at the same level, in a parallel manner. For example, in the above picture, `{bcd, cde}` are processed in parallel. The user is expected to `POST` a graph to the container hosting the public API, which then sets a `JOB ID` for each such graph and subscribes to it using a pub-sub channel. The graph to be processed can have more nodes than the number of nodes in the swarm, in case some module is supposed to be reused, for example, in the above picture, `bcd` is used twice. In order to facilitate that, each node in the graph (except the input nodes) follow the identification scheme: `${modulename}_${identifier}`
+
 ### Base image for all modules
 Either build the image:
 ```bash
