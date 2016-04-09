@@ -1,5 +1,5 @@
 # ddag-sample
-A sample setup for processing non linear workflows using docker swarm
+A sample setup for processing (non?) linear workflows using docker swarm
 
 ![ddag](https://cloud.githubusercontent.com/assets/1779189/14393336/16462410-fde4-11e5-9cc7-1aa5587d620d.png)
 
