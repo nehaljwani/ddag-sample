@@ -107,7 +107,7 @@ $ cat /tmp/input.txt
 ```
 and then type the following to find out the IP address of the container by the name 'public':
 ```bash
-$ docker network inspect ddag-net
+$ docker -H 10.1.65.241:4000 exec -it public bash -c 'ip a'
 ```
 and finally, query it (replace 172.18.0.2 with the IP of the 'public' container). Sample run:
 ```bash
